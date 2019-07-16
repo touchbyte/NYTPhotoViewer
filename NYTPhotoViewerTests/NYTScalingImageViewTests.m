@@ -10,7 +10,9 @@
 @import XCTest;
 
 #import <NYTPhotoViewer/NYTScalingImageView.h>
+#ifdef ANIMATED_GIF_SUPPORT
 #import <FLAnimatedImage/FLAnimatedImage.h>
+#endif
 
 @interface NYTScalingImageViewTests : XCTestCase
 
@@ -67,7 +69,9 @@
 - (void)testDataInitializationSetsImage {
     NYTScalingImageView *scalingImageView = [[NYTScalingImageView alloc] initWithImageData:self.imageData frame:CGRectZero];
 
-    XCTAssertEqual(self.imageData, ((FLAnimatedImageView *)scalingImageView.imageView).animatedImage.data);
+#ifdef ANIMATED_GIF_SUPPORT
+	XCTAssertEqual(self.imageData, ((FLAnimatedImageView *)scalingImageView.imageView).animatedImage.data);
+#endif
 }
 
 - (void)testUpdateImageUpdatesImage {
@@ -84,13 +88,17 @@
     NYTScalingImageView *scalingImageView = [[NYTScalingImageView alloc] initWithImageData:self.imageData frame:CGRectZero];
     [scalingImageView updateImageData:image2];
 
-    XCTAssertEqual(image2, ((FLAnimatedImageView *)scalingImageView.imageView).animatedImage.data);
+#ifdef ANIMATED_GIF_SUPPORT
+	XCTAssertEqual(image2, ((FLAnimatedImageView *)scalingImageView.imageView).animatedImage.data);
+#endif
 }
 
 - (void)testImageViewIsOfCorrectKindAfterInitialization {
     NYTScalingImageView *scalingImageViewer = [[NYTScalingImageView alloc] initWithImageData:self.imageData frame:CGRectZero];
 
-    XCTAssertTrue([scalingImageViewer.imageView isKindOfClass:FLAnimatedImageView.class]);
+#ifdef ANIMATED_GIF_SUPPORT
+	XCTAssertTrue([scalingImageViewer.imageView isKindOfClass:FLAnimatedImageView.class]);
+#endif
 }
 
 @end

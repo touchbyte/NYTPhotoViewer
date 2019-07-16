@@ -10,12 +10,33 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class NYTMediaResource;
+
+typedef enum mediatypes {
+	MTPhoto, MTVideo, MTMultiAsset
+} mediatypes;
+
+
 /**
  *  The model for photos displayed in an `NYTPhotosViewController`.
  *
  *  Your models (or boxes, if working with Swift value types) should override `isEqual:` to provide a concept of identity for the PhotoViewer to work with. 
  */
 @protocol NYTPhoto <NSObject>
+
+/**
+ *  The resources of a media object.
+ *
+ *  This property is used to enumerate the resources for a media object
+ */
+@property (nonatomic, readonly, nullable) NSArray<NYTMediaResource *> *resources;
+
+/**
+ *  The media type of the object to view.
+ *
+ *  This property is used to determine the media type of the object to view
+ */
+@property (nonatomic, assign, readonly) mediatypes mediaType;
 
 /**
  *  The image to display.

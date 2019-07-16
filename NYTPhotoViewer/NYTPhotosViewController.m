@@ -260,18 +260,22 @@ static const UIEdgeInsets NYTPhotosViewControllerCloseButtonImageInsets = {3, 0,
     if ([self.delegate respondsToSelector:@selector(photosViewController:captionViewForPhoto:)]) {
         captionView = [self.delegate photosViewController:self captionViewForPhoto:self.currentlyDisplayedPhoto];
     }
-    
-    if (!captionView) {
+	
+		// if there are no captions, don't add a caption view
+    /*if (!captionView) {
         captionView = [[NYTPhotoCaptionView alloc] initWithAttributedTitle:self.currentlyDisplayedPhoto.attributedCaptionTitle attributedSummary:self.currentlyDisplayedPhoto.attributedCaptionSummary attributedCredit:self.currentlyDisplayedPhoto.attributedCaptionCredit];
-    }
+    }*/
 
-    BOOL captionViewRespectsSafeArea = YES;
-    if ([self.delegate respondsToSelector:@selector(photosViewController:captionViewRespectsSafeAreaForPhoto:)]) {
-        captionViewRespectsSafeArea = [self.delegate photosViewController:self captionViewRespectsSafeAreaForPhoto:self.currentlyDisplayedPhoto];
-    }
-
-    self.overlayView.captionViewRespectsSafeArea = captionViewRespectsSafeArea;
-    self.overlayView.captionView = captionView;
+		if (captionView)
+		{
+			BOOL captionViewRespectsSafeArea = YES;
+			if ([self.delegate respondsToSelector:@selector(photosViewController:captionViewRespectsSafeAreaForPhoto:)]) {
+				captionViewRespectsSafeArea = [self.delegate photosViewController:self captionViewRespectsSafeAreaForPhoto:self.currentlyDisplayedPhoto];
+			}
+			
+			self.overlayView.captionViewRespectsSafeArea = captionViewRespectsSafeArea;
+			self.overlayView.captionView = captionView;
+		}
 }
 
 - (void)doneButtonTapped:(id)sender {

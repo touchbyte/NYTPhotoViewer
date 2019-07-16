@@ -10,6 +10,7 @@
 #import <NYTPhotoViewer/NYTPhotosViewController.h>
 #import <NYTPhotoViewer/NYTPhotoViewerArrayDataSource.h>
 #import "NYTExamplePhoto.h"
+#import "MediaObject.h"
 
 typedef NS_ENUM(NSUInteger, NYTViewControllerPhotoIndex) {
     NYTViewControllerPhotoIndexCustomEverything = 1,
@@ -31,17 +32,19 @@ typedef NS_ENUM(NSUInteger, NYTViewControllerPhotoIndex) {
 @implementation NYTViewController
 
 - (IBAction)imageButtonTapped:(id)sender {
-    self.dataSource = [self.class newTimesBuildingDataSource];
+    self.dataSource = [self.class touchbyteDataSource];
 
     NYTPhotosViewController *photosViewController = [[NYTPhotosViewController alloc] initWithDataSource:self.dataSource initialPhoto:nil delegate:self];
 
     [self presentViewController:photosViewController animated:YES completion:nil];
 
+	/*
     [self updateImagesOnPhotosViewController:photosViewController afterDelayWithDataSource:self.dataSource];
     BOOL demonstrateDataSourceSwitchAfterTenSeconds = NO;
     if (demonstrateDataSourceSwitchAfterTenSeconds) {
         [self switchDataSourceOnPhotosViewController:photosViewController afterDelayWithDataSource:self.dataSource];
     }
+	 */
 }
 
 // This method simulates a previously blank photo loading its images after 5 seconds.
@@ -88,17 +91,19 @@ typedef NS_ENUM(NSUInteger, NYTViewControllerPhotoIndex) {
 }
 
 - (UIView *)photosViewController:(NYTPhotosViewController *)photosViewController loadingViewForPhoto:(id <NYTPhoto>)photo {
+	/*
     if ([photo isEqual:self.dataSource.photos[NYTViewControllerPhotoIndexCustomEverything]]) {
         UILabel *loadingLabel = [[UILabel alloc] init];
         loadingLabel.text = @"Custom Loading...";
         loadingLabel.textColor = [UIColor greenColor];
         return loadingLabel;
     }
-    
+    */
     return nil;
 }
 
 - (UIView *)photosViewController:(NYTPhotosViewController *)photosViewController captionViewForPhoto:(id <NYTPhoto>)photo {
+	/*
     if ([photo isEqual:self.dataSource.photos[NYTViewControllerPhotoIndexCustomEverything]]) {
         UILabel *label = [[UILabel alloc] init];
         label.text = @"Custom Caption View";
@@ -106,14 +111,14 @@ typedef NS_ENUM(NSUInteger, NYTViewControllerPhotoIndex) {
         label.backgroundColor = [UIColor redColor];
         return label;
     }
-    
+*/
     return nil;
 }
 
 - (CGFloat)photosViewController:(NYTPhotosViewController *)photosViewController maximumZoomScaleForPhoto:(id <NYTPhoto>)photo {
-    if ([photo isEqual:self.dataSource.photos[NYTViewControllerPhotoIndexCustomMaxZoomScale]]) {
-        return 0.5f;
-    }
+    //if ([photo isEqual:self.dataSource.photos[NYTViewControllerPhotoIndexCustomMaxZoomScale]]) {
+    //    return 0.5f;
+    //}
 
     return 1.0f;
 }
@@ -147,6 +152,26 @@ typedef NS_ENUM(NSUInteger, NYTViewControllerPhotoIndex) {
 }
 
 #pragma mark - Sample Data Sources
++ (NYTPhotoViewerArrayDataSource *)touchbyteDataSource {
+	NSMutableArray *media = [NSMutableArray array];
+	
+	MediaObject *obj1 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0001.JPG"]];
+	[media addObject:obj1];
+
+	MediaObject *obj2 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0002.HEIC"]];
+	[media addObject:obj2];
+
+	MediaObject *obj3 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0003.DNG"]];
+	[media addObject:obj3];
+
+	MediaObject *obj4 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0004.MOV"]];
+	[media addObject:obj4];
+	
+	MediaObject *obj5 = [[MediaObject alloc] initWithURLArray:[NSArray arrayWithObjects:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0005.HEIC"], [NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0005.MOV"], nil]];
+	[media addObject:obj5];
+	
+	return [NYTPhotoViewerArrayDataSource dataSourceWithPhotos:media];
+}
 
 + (NYTPhotoViewerArrayDataSource *)newTimesBuildingDataSource {
     NSMutableArray *photos = [NSMutableArray array];
