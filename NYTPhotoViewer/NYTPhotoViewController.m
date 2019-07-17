@@ -23,6 +23,7 @@ NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification = @"NYTPhot
 - (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
 
 @property (nonatomic) NYTScalingImageView *scalingImageView;
+@property (nonatomic) UIImageView *playButton;
 @property (nonatomic) UIView *loadingView;
 @property (nonatomic) NSNotificationCenter *notificationCenter;
 @property (nonatomic) UITapGestureRecognizer *doubleTapGestureRecognizer;
@@ -115,6 +116,17 @@ NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification = @"NYTPhot
 
     _notificationCenter = notificationCenter;
 
+		if (photo.mediaType == MTVideo)
+		{
+			_playButton = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"videoPlayBack" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil]];
+			/*
+			NSLayoutConstraint *topConstraint = [NSLayoutConstraint constraintWithItem:self.navigationBar attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0 constant:0.0];
+			NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:self.view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:_playButton attribute:NSLayoutAttributeWidth multiplier:1.0 constant:0.0];
+			NSLayoutConstraint *horizontalPositionConstraint = [NSLayoutConstraint constraintWithItem:self.navigationBar attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0];
+			[self addConstraints:@[topConstraint, widthConstraint, horizontalPositionConstraint]];
+			 */
+		}
+	
     [self setupGestureRecognizers];
 }
 

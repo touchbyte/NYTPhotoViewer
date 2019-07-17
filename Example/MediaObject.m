@@ -8,10 +8,12 @@
 
 #import "MediaObject.h"
 #import "ImageFunctions.h"
+#import "NSString+Extensions.h"
+#import "Resource.h"
 
 @interface MediaObject ()
 
-@property (nonatomic) NSArray<NSURL *> *assets;
+@property (nonatomic) NSArray<NYTMediaResource *> *assets;
 
 @end
 
@@ -21,7 +23,7 @@
 {
 	self = [super init];
 	
-	self.assets = [NSArray arrayWithObject:url];
+	self.assets = [NSArray arrayWithObject:[[Resource alloc] initWithURL:url]];
 	
 	return self;
 }
@@ -30,26 +32,44 @@
 {
 	self = [super init];
 
-	self.assets = [NSArray arrayWithArray:urls];
+	self.assets = [NSMutableArray new];
+	[urls enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+		[((NSMutableArray *)self.assets) addObject:[[Resource alloc] initWithURL:obj]];
+	}];
 	
 	return self;
 }
 
 - (UIImage *)image
 {
-	return nil;
-	//[ImageFunctions createResizedUIImageFromURL:self.assets[0] imageSize:2048];
+	return [((Resource *)self.resources[0]) imageRepresentation];
 }
 
 - (NSData *)imageData
 {
-	return nil;
-	//[NSData dataWithContentsOfFile:((NSURL *)self.assets[0]).path];
+	return nil;//[NSData dataWithContentsOfFile:((Resource *)self.assets[0]).url.path];
 }
 
-- (NSURL *)dataURL
+- (mediatypes) mediaType
 {
-	return self.assets[0];
+	if ([((Resource *)self.assets[0]).url.path isImageFile])
+	{
+		return MTPhoto;
+	}
+	else if ([((Resource *)self.assets[0]).url.path isVideoFile])
+	{
+		return MTVideo;
+	}
+	else if (self.assets.count == 2)
+	{
+		return MTMultiAsset;
+	}
+	else return MTPhoto;
+}
+
+- (NSArray<NYTMediaResource *> *)resources
+{
+	return self.assets;
 }
 
 @end

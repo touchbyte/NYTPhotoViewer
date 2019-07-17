@@ -9,6 +9,7 @@
 @import Foundation;
 
 #import <NYTPhotoViewer/NYTPhoto.h>
+#import <NYTPhotoViewer/NYTMediaResource.h>
 
 @interface MediaObject : NSObject <NYTPhoto>
 

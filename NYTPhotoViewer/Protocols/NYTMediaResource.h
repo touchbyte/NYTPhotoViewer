@@ -18,6 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSData *)data;
 - (NSURL *)url;
+- (UIImage *)imageRepresentation;
 
 @end
 
