@@ -99,6 +99,12 @@ extern NSString * const NYTPhotosViewControllerDidDismissNotification;
 @property (nonatomic, weak, nullable) id <NYTPhotosViewControllerDelegate> delegate;
 
 /**
+ *  The internal video playback view.
+ */
+@property (nonatomic, readonly) UIImageView *playButton;
+
+
+/**
  *  Initializes a `PhotosViewController` with the given data source, initially displaying the first photo in the data source.
  *
  *  @param dataSource The data source underlying this photo viewer.
