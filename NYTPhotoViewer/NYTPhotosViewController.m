@@ -42,8 +42,6 @@ static const UIEdgeInsets NYTPhotosViewControllerCloseButtonImageInsets = {3, 0,
 
 @property (nonatomic) NYTPhotosOverlayView *overlayView;
 
-@property (nonatomic) UIImageView *playButton;
-
 /// A custom notification center to scope internal notifications to this `NYTPhotosViewController` instance.
 @property (nonatomic) NSNotificationCenter *notificationCenter;
 
@@ -234,7 +232,7 @@ static const UIEdgeInsets NYTPhotosViewControllerCloseButtonImageInsets = {3, 0,
     
     [self updateOverlayInformation];
     [self.view addSubview:self.overlayView];
-    
+
     [self setOverlayViewHidden:YES animated:NO];
 }
 
@@ -356,35 +354,6 @@ static const UIEdgeInsets NYTPhotosViewControllerCloseButtonImageInsets = {3, 0,
     NYTPhotoViewController *photoViewController = [self newPhotoViewControllerForPhoto:photo];
     [self setCurrentlyDisplayedViewController:photoViewController animated:animated];
     [self updateOverlayInformation];
-	[self updateMediaTypeSpecificLayers:photo];
-}
-
-- (void)updateMediaTypeSpecificLayers:(id <NYTPhoto>)photo
-{
-	if (photo.mediaType == MTVideo)
-	{
-		if (!_playButton)
-		{
-			_playButton = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"videoPlayBack" inBundle:[NSBundle bundleForClass:[self class]] compatibleWithTraitCollection:nil]];
-			NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:_playButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:72];
-			NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:_playButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:72];
-			NSLayoutConstraint *horizontalConstraint = [NSLayoutConstraint constraintWithItem:_playButton attribute:NSLayoutAttributeCenterX relatedBy:0 toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0];
-			NSLayoutConstraint *verticalConstraint = [NSLayoutConstraint constraintWithItem:_playButton attribute:NSLayoutAttributeCenterY relatedBy:0 toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0];
-			[_playButton addConstraints:@[widthConstraint,heightConstraint,horizontalConstraint,verticalConstraint]];
-			
-			UITapGestureRecognizer *playGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(playButtonTapped:)];
-			[_playButton addGestureRecognizer:playGesture];
-		}
-		[self.view addSubview:_playButton];
-	}
-	else
-	{
-		if (_playButton) [_playButton removeFromSuperview];
-	}
-}
-
-- (void)playButtonTapped:(id)sender {
-	NSLog(@"play");
 }
 
 - (void)updatePhotoAtIndex:(NSInteger)photoIndex {
@@ -627,7 +596,7 @@ static const UIEdgeInsets NYTPhotosViewControllerCloseButtonImageInsets = {3, 0,
 - (void)pageViewController:(UIPageViewController *)pageViewController didFinishAnimating:(BOOL)finished previousViewControllers:(NSArray *)previousViewControllers transitionCompleted:(BOOL)completed {
     if (completed) {
         [self updateOverlayInformation];
-        
+			
         UIViewController <NYTPhotoContainer> *photoViewController = pageViewController.viewControllers.firstObject;
         [self didNavigateToPhoto:photoViewController.photo];
     }

@@ -47,6 +47,12 @@ extern NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification;
 @property (nonatomic, weak, nullable) id <NYTPhotoViewControllerDelegate> delegate;
 
 /**
+ *  The internal video playback view.
+ */
+@property (nonatomic, readonly) UIImageView *playButton;
+
+
+/**
  *  The designated initializer that takes the photo and activity view.
  *
  *  @param photo              The photo object that this view controller manages.
