@@ -24,7 +24,7 @@ typedef NS_ENUM(NSUInteger, resourcetypes) {
 
 @property (nonatomic, assign, readonly) resourcetypes resourceType;
 
-- (NSData *)data;
+- (nullable NSData *)data;
 - (NSURL *)url;
 - (UIImage *)imageRepresentation;
 
