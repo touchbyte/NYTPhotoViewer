@@ -10,9 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef enum resourcetypes {
-	RTPhoto, RTVideo, RTRaw
-} resourcetypes;
+typedef NS_ENUM(NSUInteger, resourcetypes) {
+	RTPhoto,
+	RTVideo,
+	RTRaw,
+};
 
 /**
  *  The model for the resource of a media object displayed in an `NYTPhotosViewController`.

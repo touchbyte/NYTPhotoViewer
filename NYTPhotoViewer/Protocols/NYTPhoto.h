@@ -12,10 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol NYTMediaResource;
 
-typedef enum mediatypes {
-	MTPhoto, MTVideo, MTMultiAsset
-} mediatypes;
-
+typedef NS_ENUM(NSUInteger, mediatypes) {
+	MTPhoto,
+	MTVideo,
+	MTMultiAsset,
+};
 
 /**
  *  The model for photos displayed in an `NYTPhotosViewController`.
