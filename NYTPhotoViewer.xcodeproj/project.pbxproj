@@ -94,6 +94,7 @@
 		93F45B1A1E3BB5610093DB93 /* NYTPhotoViewerSinglePhotoDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F45B171E3BB5610093DB93 /* NYTPhotoViewerSinglePhotoDataSource.m */; };
 		93F45B1B1E3BB5610093DB93 /* NYTPhotoViewerSinglePhotoDataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 93F45B171E3BB5610093DB93 /* NYTPhotoViewerSinglePhotoDataSource.m */; };
 		AC7E37B522E5C35700B729FC /* NYTMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC7E37B422E5C35700B729FC /* NYTMoviePlayerViewController.m */; };
+		ACAE5CB122E9E13C008B2329 /* NYTMoviePlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AC7E37B422E5C35700B729FC /* NYTMoviePlayerViewController.m */; };
 		ACF8EDAF22DDC69700D1F11C /* MediaObject.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF8EDAE22DDC69700D1F11C /* MediaObject.m */; };
 		ACF8EDB422DDD31B00D1F11C /* ImageFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF8EDB322DDD31B00D1F11C /* ImageFunctions.m */; };
 		ACF8EDB822DF23EF00D1F11C /* NSString+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF8EDB722DF23EF00D1F11C /* NSString+Extensions.m */; };
@@ -738,6 +739,7 @@
 				11FBDA9D1C87753200018169 /* NYTScalingImageView.m in Sources */,
 				11FBDA911C87753200018169 /* NYTPhotoViewerArrayDataSource.m in Sources */,
 				11FBDA931C87753200018169 /* NYTPhotosOverlayView.m in Sources */,
+				ACAE5CB122E9E13C008B2329 /* NYTMoviePlayerViewController.m in Sources */,
 				11FBDA971C87753200018169 /* NYTPhotoTransitionAnimator.m in Sources */,
 				11FBDA8F1C87753200018169 /* NYTPhotoDismissalInteractionController.m in Sources */,
 				11FBDA9B1C87753200018169 /* NYTPhotoViewController.m in Sources */,
