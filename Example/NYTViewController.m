@@ -34,7 +34,8 @@ typedef NS_ENUM(NSUInteger, NYTViewControllerPhotoIndex) {
 - (IBAction)imageButtonTapped:(id)sender {
     self.dataSource = [self.class touchbyteDataSource];
 
-    NYTPhotosViewController *photosViewController = [[NYTPhotosViewController alloc] initWithDataSource:self.dataSource initialPhoto:nil delegate:self];
+		id <NYTPhoto> initialPhoto = [self.dataSource photoAtIndex:3];
+    NYTPhotosViewController *photosViewController = [[NYTPhotosViewController alloc] initWithDataSource:self.dataSource initialPhoto:initialPhoto delegate:self];
 
     [self presentViewController:photosViewController animated:YES completion:nil];
 
@@ -155,16 +156,16 @@ typedef NS_ENUM(NSUInteger, NYTViewControllerPhotoIndex) {
 + (NYTPhotoViewerArrayDataSource *)touchbyteDataSource {
 	NSMutableArray *media = [NSMutableArray array];
 	
-	MediaObject *obj1 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0001.JPG"]];
+	MediaObject *obj1 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0001.JPG"] andResourceType:RTPhoto];
 	[media addObject:obj1];
 
-	MediaObject *obj2 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0002.HEIC"]];
+	MediaObject *obj2 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0002.HEIC"] andResourceType:RTPhoto];
 	[media addObject:obj2];
 
-	MediaObject *obj3 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0003.DNG"]];
+	MediaObject *obj3 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0003.DNG"] andResourceType:RTRaw];
 	[media addObject:obj3];
 
-	MediaObject *obj4 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0004.MOV"]];
+	MediaObject *obj4 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0004.MOV"] andResourceType:RTVideo];
 	[media addObject:obj4];
 	
 	MediaObject *obj5 = [[MediaObject alloc] initWithURLArray:[NSArray arrayWithObjects:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0005.HEIC"], [NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0005.MOV"], nil]];

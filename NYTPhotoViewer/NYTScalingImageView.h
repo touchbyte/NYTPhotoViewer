@@ -7,6 +7,7 @@
 //
 
 @import UIKit;
+@import PhotosUI;
 
 #ifdef ANIMATED_GIF_SUPPORT
 @class FLAnimatedImageView;
@@ -14,7 +15,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface NYTScalingImageView : UIScrollView
+@interface NYTScalingImageView : UIScrollView<PHLivePhotoViewDelegate>
+{
+	BOOL _isLivePhoto;
+}
 
 /**
  *  The image view used internally as the contents of the scroll view.
@@ -22,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 #ifdef ANIMATED_GIF_SUPPORT
 @property (nonatomic, readonly) FLAnimatedImageView *imageView;
 #else
-@property (nonatomic, readonly) UIImageView *imageView;
+@property (nonatomic, readonly) UIView *imageView;
 #endif
 
 /**
@@ -45,6 +49,10 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (instancetype)initWithImageData:(NSData *)imageData frame:(CGRect)frame NS_DESIGNATED_INITIALIZER;
 
+#ifdef __IPHONE_9_1
+- (instancetype)initWithLivePhoto:(PHLivePhoto *)livePhoto frame:(CGRect)frame NS_DESIGNATED_INITIALIZER;
+#endif
+
 /**
  *  Updates the image in the image view and centers and zooms the new image.
  *
@@ -58,6 +66,8 @@ NS_ASSUME_NONNULL_BEGIN
  *  @param imageData The data representing an animated image to display in the image view.
  */
 - (void)updateImageData:(NSData *)imageData;
+
+- (void)updateLivePhoto:(PHLivePhoto *)image;
 
 /**
  *  Centers the image inside of the scroll view. Typically used after rotation, or when zooming has finished.

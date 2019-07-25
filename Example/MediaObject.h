@@ -19,7 +19,7 @@
 @property (nonatomic) NSAttributedString *attributedCaptionSummary;
 @property (nonatomic) NSAttributedString *attributedCaptionCredit;
 
-- (instancetype)initWithURL:(NSURL *)url;
+- (instancetype)initWithURL:(NSURL *)url andResourceType:(resourcetypes)type;
 - (instancetype)initWithURLArray:(NSArray *)urls;
 - (UIImage *)image;
 

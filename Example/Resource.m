@@ -16,11 +16,12 @@
 
 @implementation Resource
 
-- (instancetype)initWithURL:(NSURL *)url
+- (instancetype)initWithURL:(NSURL *)url andResourceType:(resourcetypes)type
 {
 	self = [super init];
 	
 	_url = url;
+	_type = type;
 	
 	return self;
 }
@@ -32,6 +33,11 @@
 
 - (nonnull NSURL *)url {
 	return _url;
+}
+
+- (resourcetypes)resourceType
+{
+	return _type;
 }
 
 - (nonnull UIImage *)imageRepresentation {

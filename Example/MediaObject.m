@@ -13,17 +13,19 @@
 
 @interface MediaObject ()
 
-@property (nonatomic) NSArray<NYTMediaResource *> *assets;
+@property (nonatomic) NSArray<id<NYTMediaResource>> *assets;
 
 @end
 
 @implementation MediaObject
 
-- (instancetype)initWithURL:(NSURL *)url
+- (instancetype)initWithURL:(NSURL *)url andResourceType:(resourcetypes)type
 {
 	self = [super init];
 	
-	self.assets = [NSArray arrayWithObject:[[Resource alloc] initWithURL:url]];
+	
+	
+	self.assets = [NSArray arrayWithObject:[[Resource alloc] initWithURL:url andResourceType:type]];
 	
 	return self;
 }
@@ -34,7 +36,16 @@
 
 	self.assets = [NSMutableArray new];
 	[urls enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-		[((NSMutableArray *)self.assets) addObject:[[Resource alloc] initWithURL:obj]];
+		resourcetypes t = RTPhoto;
+		if ([[[((NSURL *)obj) pathExtension] lowercaseString] isEqualToString:@"mov"])
+		{
+			t = RTVideo;
+		}
+		else if ([[[((NSURL *)obj) pathExtension] lowercaseString] isEqualToString:@"dng"])
+		{
+			t = RTRaw;
+		}
+		[((NSMutableArray *)self.assets) addObject:[[Resource alloc] initWithURL:obj andResourceType:t]];
 	}];
 	
 	return self;
@@ -67,7 +78,7 @@
 	else return MTPhoto;
 }
 
-- (NSArray<NYTMediaResource *> *)resources
+- (NSArray<id<NYTMediaResource>> *)resources
 {
 	return self.assets;
 }

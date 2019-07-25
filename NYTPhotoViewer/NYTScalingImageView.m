@@ -21,7 +21,7 @@
 #ifdef ANIMATED_GIF_SUPPORT
 @property (nonatomic) FLAnimatedImageView *imageView;
 #else
-@property (nonatomic) UIImageView *imageView;
+@property (nonatomic) UIView *imageView;
 #endif
 @end
 
@@ -59,22 +59,46 @@
 - (instancetype)initWithImage:(UIImage *)image frame:(CGRect)frame {
     self = [super initWithFrame:frame];
 
-    if (self) {
-        [self commonInitWithImage:image imageData:nil];
-    }
-    
-    return self;
+	_isLivePhoto = NO;
+
+	if (self) {
+			[self commonInitWithImage:image imageData:nil];
+  }
+	
+  return self;
 }
 
 - (instancetype)initWithImageData:(NSData *)imageData frame:(CGRect)frame {
     self = [super initWithFrame:frame];
     
-    if (self) {
+	_isLivePhoto = NO;
+
+	if (self) {
         [self commonInitWithImage:nil imageData:imageData];
     }
     
-    return self;
+	return self;
 }
+
+#ifdef __IPHONE_9_1
+- (instancetype)initWithLivePhoto:(PHLivePhoto *)livePhoto frame:(CGRect)frame {
+	self = [super initWithFrame:frame];
+
+	_isLivePhoto = YES;
+
+	if (self) {
+		[self commonInitWithLivePhoto:livePhoto];
+	}
+	
+	return self;
+}
+
+- (void)commonInitWithLivePhoto:(PHLivePhoto *)image {
+	[self setupInternalImageViewWithLivePhoto:image];
+	[self setupImageScrollView];
+	[self updateZoomScale];
+}
+#endif
 
 - (void)commonInitWithImage:(UIImage *)image imageData:(NSData *)imageData {
     [self setupInternalImageViewWithImage:image imageData:imageData];
@@ -82,7 +106,32 @@
     [self updateZoomScale];
 }
 
+#pragma mark - PHLivePhotoViewDelegate
+
+- (void)livePhotoView:(PHLivePhotoView *)livePhotoView willBeginPlaybackWithStyle:(PHLivePhotoViewPlaybackStyle)playbackStyle
+{
+	NSLog(@"begin playback");
+}
+
+- (void)livePhotoView:(PHLivePhotoView *)livePhotoView didEndPlaybackWithStyle:(PHLivePhotoViewPlaybackStyle)playbackStyle
+{
+	NSLog(@"end playback");
+}
+
+
 #pragma mark - Setup
+
+- (void)setupInternalImageViewWithLivePhoto:(PHLivePhoto *)image  {
+	self.imageView = [[PHLivePhotoView alloc] initWithFrame:self.bounds];
+	//_livePhotoView.opaque = YES;
+	self.imageView.contentMode = UIViewContentModeScaleAspectFit;
+	//_livePhotoView.tag = ZOOM_VIEW_TAG;
+	((PHLivePhotoView *)self.imageView).delegate = self;
+	UIImageView *livePhotoIconView = [[UIImageView alloc] initWithImage:[PHLivePhotoView livePhotoBadgeImageWithOptions:PHLivePhotoBadgeOptionsOverContent]];
+
+	[self updateLivePhoto:image];
+	[self addSubview:self.imageView];
+}
 
 - (void)setupInternalImageViewWithImage:(UIImage *)image imageData:(NSData *)imageData {
     UIImage *imageToUse = image ?: [UIImage imageWithData:imageData];
@@ -105,6 +154,19 @@
     [self updateImage:nil imageData:imageData];
 }
 
+- (void)updateLivePhoto:(PHLivePhoto *)image {
+	// Remove any transform currently applied by the scroll view zooming.
+	self.imageView.transform = CGAffineTransformIdentity;
+	((PHLivePhotoView *)self.imageView).livePhoto = image;
+	
+	self.imageView.frame = CGRectMake(0, 0, image.size.width, image.size.height);
+	
+	self.contentSize = image.size;
+	
+	[self updateZoomScale];
+	[self centerScrollViewContents];
+}
+
 - (void)updateImage:(UIImage *)image imageData:(NSData *)imageData {
 #ifdef DEBUG
 #ifndef ANIMATED_GIF_SUPPORT
@@ -118,7 +180,7 @@
 
     // Remove any transform currently applied by the scroll view zooming.
     self.imageView.transform = CGAffineTransformIdentity;
-    self.imageView.image = imageToUse;
+    ((UIImageView *)self.imageView).image = imageToUse;
     
 #ifdef ANIMATED_GIF_SUPPORT
     // It's necessarry to first assign the UIImage so calulations for layout go right (see above)
@@ -141,16 +203,61 @@
     self.decelerationRate = UIScrollViewDecelerationRateFast;
 }
 
-- (void)updateZoomScale {
+- (CGSize)getImageSize
+{
 #ifdef ANIMATED_GIF_SUPPORT
-    if (self.imageView.animatedImage || self.imageView.image) {
+		if (_isLivePhoto)
+		{
+			return ((PHLivePhotoView *)self.imageView).livePhoto.size;
+		}
+		else
+		{
+			if (((UIImageView *)self.imageView).animatedImage)
+			{
+				return ((UIImageView *)self.imageView).animatedImage.size;
+			}
+			else return ((UIImageView *)self.imageView).image.size;
+		}
 #else
-    if (self.imageView.image) {
+	if (_isLivePhoto)
+	{
+		return ((PHLivePhotoView *)self.imageView).livePhoto.size;
+	}
+	else
+	{
+		return ((UIImageView *)self.imageView).image.size;
+	}
 #endif
+}
+
+- (void)updateZoomScale {
+	BOOL imageExists = NO;
+#ifdef ANIMATED_GIF_SUPPORT
+	if (_isLivePhoto)
+	{
+		imageExists = ((PHLivePhotoView *)self.imageView).livePhoto != nil;
+	}
+	else
+	{
+		imageExists = (((UIImageView *)self.imageView).animatedImage || ((UIImageView *)self.imageView).image);
+	}
+#else
+	if (_isLivePhoto)
+	{
+		imageExists = ((PHLivePhotoView *)self.imageView).livePhoto != nil;
+	}
+	else
+	{
+		imageExists = ((UIImageView *)self.imageView).image != nil;
+	}
+#endif
+
+
+    if (imageExists) {
         CGRect scrollViewFrame = self.bounds;
         
-        CGFloat scaleWidth = scrollViewFrame.size.width / self.imageView.image.size.width;
-        CGFloat scaleHeight = scrollViewFrame.size.height / self.imageView.image.size.height;
+        CGFloat scaleWidth = scrollViewFrame.size.width / [self getImageSize].width;
+        CGFloat scaleHeight = scrollViewFrame.size.height / [self getImageSize].height;
         CGFloat minScale = MIN(scaleWidth, scaleHeight);
         
         self.minimumZoomScale = minScale;

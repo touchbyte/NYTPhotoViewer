@@ -7,6 +7,7 @@
 //
 
 @import UIKit;
+@import PhotosUI;
 #import "NYTPhotoContainer.h"
 
 @class NYTScalingImageView;
@@ -49,8 +50,9 @@ extern NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification;
 /**
  *  The internal video playback view.
  */
-@property (nonatomic, readonly) UIImageView *playButton;
+@property (nonatomic, readonly) UIButton *playButton;
 
+@property (nonatomic, readonly) UIImageView *livePhotoBadge;
 
 /**
  *  The designated initializer that takes the photo and activity view.

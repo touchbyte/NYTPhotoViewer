@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class NYTMediaResource;
+@protocol NYTMediaResource;
 
 typedef enum mediatypes {
 	MTPhoto, MTVideo, MTMultiAsset
@@ -29,7 +29,7 @@ typedef enum mediatypes {
  *
  *  This property is used to enumerate the resources for a media object
  */
-@property (nonatomic, readonly, nullable) NSArray<NYTMediaResource *> *resources;
+@property (nonatomic, readonly, nullable) NSArray<id<NYTMediaResource>> *resources;
 
 /**
  *  The media type of the object to view.
