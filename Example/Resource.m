@@ -16,7 +16,7 @@
 
 @implementation Resource
 
-- (instancetype)initWithURL:(NSURL *)url andResourceType:(resourcetypes)type
+- (instancetype)initWithURL:(NSURL *)url andResourceType:(Resourcetypes)type
 {
 	self = [super init];
 	
@@ -27,7 +27,7 @@
 }
 
 
-- (nonnull NSData *)data {
+- (nullable NSData *)data {
 	return nil;
 }
 
@@ -35,7 +35,7 @@
 	return _url;
 }
 
-- (resourcetypes)resourceType
+- (Resourcetypes)resourceType
 {
 	return _type;
 }

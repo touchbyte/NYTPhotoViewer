@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @protocol NYTMediaResource;
 
-typedef NS_ENUM(NSUInteger, mediatypes) {
+typedef NS_ENUM(NSUInteger, Mediatypes) {
 	MTPhoto,
 	MTVideo,
 	MTMultiAsset,
@@ -37,7 +37,7 @@ typedef NS_ENUM(NSUInteger, mediatypes) {
  *
  *  This property is used to determine the media type of the object to view
  */
-@property (nonatomic, assign, readonly) mediatypes mediaType;
+@property (nonatomic, assign, readonly) Mediatypes mediaType;
 
 /**
  *  The image to display.

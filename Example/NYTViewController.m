@@ -156,9 +156,19 @@ typedef NS_ENUM(NSUInteger, NYTViewControllerPhotoIndex) {
 + (NYTPhotoViewerArrayDataSource *)touchbyteDataSource {
 	NSMutableArray *media = [NSMutableArray array];
 	
-	MediaObject *obj1 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0001.JPG"] andResourceType:RTPhoto];
+	MediaObject *obj1 = [MediaObject new]; obj1.image = [UIImage imageWithContentsOfFile:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0001.JPG"];
+	MediaObject *obj2 = [MediaObject new]; obj2.image = [UIImage imageWithContentsOfFile:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0002.HEIC"];
+	MediaObject *obj3 = [MediaObject new]; obj3.image = [UIImage imageWithContentsOfFile:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0005.HEIC"];
+	MediaObject *obj4 = [MediaObject new]; obj4.image = [UIImage imageWithContentsOfFile:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0002.HEIC"];
+	MediaObject *obj5 = [MediaObject new]; obj5.image = [UIImage imageWithContentsOfFile:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0001.HEIC"];
+	//MediaObject *obj1 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0001.JPG"] andResourceType:RTPhoto];
 	[media addObject:obj1];
+	[media addObject:obj2];
+	[media addObject:obj3];
+	[media addObject:obj4];
+	[media addObject:obj5];
 
+	/*
 	MediaObject *obj2 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0002.HEIC"] andResourceType:RTPhoto];
 	[media addObject:obj2];
 
@@ -170,6 +180,7 @@ typedef NS_ENUM(NSUInteger, NYTViewControllerPhotoIndex) {
 	
 	MediaObject *obj5 = [[MediaObject alloc] initWithURLArray:[NSArray arrayWithObjects:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0005.HEIC"], [NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0005.MOV"], nil]];
 	[media addObject:obj5];
+	 */
 	
 	return [NYTPhotoViewerArrayDataSource dataSourceWithPhotos:media];
 }

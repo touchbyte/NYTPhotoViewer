@@ -18,7 +18,7 @@
 @end
 
 @implementation MediaObject
-
+/*
 - (instancetype)initWithURL:(NSURL *)url andResourceType:(resourcetypes)type
 {
 	self = [super init];
@@ -82,5 +82,5 @@
 {
 	return self.assets;
 }
-
+*/
 @end

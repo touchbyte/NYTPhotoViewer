@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSUInteger, resourcetypes) {
+typedef NS_ENUM(NSUInteger, Resourcetypes) {
 	RTPhoto,
 	RTVideo,
 	RTRaw,
@@ -22,7 +22,7 @@ typedef NS_ENUM(NSUInteger, resourcetypes) {
  */
 @protocol NYTMediaResource <NSObject>
 
-@property (nonatomic, assign, readonly) resourcetypes resourceType;
+@property (nonatomic, assign, readonly) Resourcetypes resourceType;
 
 - (nullable NSData *)data;
 - (NSURL *)url;
