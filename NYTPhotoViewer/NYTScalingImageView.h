@@ -73,6 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  Centers the image inside of the scroll view. Typically used after rotation, or when zooming has finished.
  */
 - (void)centerScrollViewContents;
+- (CGSize)getImageSize;
 
 @end
 

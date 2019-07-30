@@ -18,8 +18,8 @@
 @end
 
 @implementation MediaObject
-/*
-- (instancetype)initWithURL:(NSURL *)url andResourceType:(resourcetypes)type
+
+- (instancetype)initWithURL:(NSURL *)url andResourceType:(Resourcetypes)type
 {
 	self = [super init];
 	
@@ -36,7 +36,7 @@
 
 	self.assets = [NSMutableArray new];
 	[urls enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-		resourcetypes t = RTPhoto;
+		Resourcetypes t = RTPhoto;
 		if ([[[((NSURL *)obj) pathExtension] lowercaseString] isEqualToString:@"mov"])
 		{
 			t = RTVideo;
@@ -61,7 +61,7 @@
 	return nil;//[NSData dataWithContentsOfFile:((Resource *)self.assets[0]).url.path];
 }
 
-- (mediatypes) mediaType
+- (Mediatypes) mediaType
 {
 	if ([((Resource *)self.assets[0]).url.path isImageFile])
 	{
@@ -82,5 +82,5 @@
 {
 	return self.assets;
 }
-*/
+
 @end

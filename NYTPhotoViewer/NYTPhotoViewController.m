@@ -11,6 +11,7 @@
 #import "NYTMediaResource.h"
 #import "NYTScalingImageView.h"
 #import "NYTMoviePlayerViewController.h"
+#import "NYTBadgeLive.h"
 
 #ifdef ANIMATED_GIF_SUPPORT
 #import <FLAnimatedImage/FLAnimatedImage.h>
@@ -21,6 +22,7 @@ NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification = @"NYTPhot
 @interface NYTPhotoViewController () <UIScrollViewDelegate>
 
 @property (nonatomic) id <NYTPhoto> photo;
+@property (nonatomic, readonly) NYTBadgeLive *livePhotoBadge;
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder NS_DESIGNATED_INITIALIZER;
 - (void)setPlayButtonHidden:(BOOL)hidden animated:(BOOL)animated;
@@ -82,17 +84,23 @@ NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification = @"NYTPhot
 	[self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.playButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0.0]];
 	
 	[self.view addSubview:_livePhotoBadge];
-
 	self.livePhotoBadge.translatesAutoresizingMaskIntoConstraints = NO;
 	id liveViews = @{@"livePhotoBadge": self.livePhotoBadge};
-	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[livePhotoBadge(%.f)]", self.livePhotoBadge.image.size.width] options:0 metrics:nil views:liveViews]];
-	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[livePhotoBadge(%.f)]", self.livePhotoBadge.image.size.height] options:0 metrics:nil views:liveViews]];
-	[self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.livePhotoBadge attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0 constant:14.0]];
+	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"H:[livePhotoBadge(%.f)]", self.livePhotoBadge.bounds.size.width] options:0 metrics:nil views:liveViews]];
+	[self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:[NSString stringWithFormat:@"V:[livePhotoBadge(%.f)]", self.livePhotoBadge.bounds.size.height] options:0 metrics:nil views:liveViews]];
+	[self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.livePhotoBadge attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeLeft multiplier:1.0 constant:6.0]];
 	[self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.livePhotoBadge attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeTop multiplier:1.0 constant:100.0]];
-
 	
 	[self.view addGestureRecognizer:self.doubleTapGestureRecognizer];
 	[self.view addGestureRecognizer:self.longPressGestureRecognizer];
+}
+
+- (void)setOverlayViewsHidden:(BOOL)hidden animated:(BOOL)animated
+{
+	if ([self isLivePhoto:_photo])
+	{
+		[self setLivePhotoBadgeHidden:hidden animated:animated];
+	}
 }
 
 - (void)viewWillLayoutSubviews {
@@ -102,6 +110,25 @@ NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification = @"NYTPhot
 	
 	[self.loadingView sizeToFit];
 	self.loadingView.center = CGPointMake(CGRectGetMidX(self.view.bounds), CGRectGetMidY(self.view.bounds));
+}
+
+- (void)viewDidLayoutSubviews
+{
+	[super viewDidLayoutSubviews];
+	
+	/*
+	if ([self isLivePhoto:_photo])
+	{
+		CGFloat leftOffset = (self.view.bounds.size.width - (self.scalingImageView.zoomScale * [self.scalingImageView getImageSize].width))/2.0 + 10;
+		CGFloat topOffset = (self.view.bounds.size.height - (self.scalingImageView.zoomScale * [self.scalingImageView getImageSize].height))/2.0 + 10;
+		CGFloat topOffsetLive = topOffset;
+		
+		CGFloat layoutGuide = ((UIViewController*)self.parentViewController).topLayoutGuide.length;
+		if (topOffsetLive <layoutGuide) topOffsetLive = layoutGuide;
+		self.livePhotoBadge.frame = CGRectMake(leftOffset+15, topOffsetLive+15, self.livePhotoBadge.image.size.width, self.livePhotoBadge.image.size.height);
+	}
+	 */
+
 }
 
 - (BOOL)prefersHomeIndicatorAutoHidden {
@@ -155,6 +182,15 @@ NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification = @"NYTPhot
 		__typeof(self) __weak weakSelf = self;
 		[PHLivePhoto requestLivePhotoWithResourceFileURLs:@[photo.resources[0].url, photo.resources[1].url] placeholderImage:nil targetSize:CGSizeZero contentMode:PHImageContentModeAspectFill resultHandler:^(PHLivePhoto * _Nullable livePhoto, NSDictionary * _Nonnull info) {
 			[weakSelf.scalingImageView updateLivePhoto:livePhoto];
+			/*
+			CGFloat leftOffset = (weakSelf.view.bounds.size.width - (weakSelf.scalingImageView.zoomScale * [weakSelf.scalingImageView getImageSize].width))/2.0 + 10;
+			CGFloat topOffset = (weakSelf.view.bounds.size.height - (weakSelf.scalingImageView.zoomScale * [weakSelf.scalingImageView getImageSize].height))/2.0 + 10;
+			CGFloat topOffsetLive = topOffset;
+			
+			CGFloat layoutGuide = ((UIViewController*)weakSelf.parentViewController).topLayoutGuide.length;
+			if (topOffsetLive <layoutGuide) topOffsetLive = layoutGuide;
+			weakSelf.livePhotoBadge.frame = CGRectMake(leftOffset+15, topOffsetLive+15, weakSelf.livePhotoBadge.image.size.width, weakSelf.livePhotoBadge.image.size.height);
+			 */
 		}];
 #else
 		if (photo.imageData) {
@@ -207,7 +243,8 @@ NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification = @"NYTPhot
 {
 	if (!_livePhotoBadge)
 	{
-		_livePhotoBadge = [[UIImageView alloc] initWithImage:[PHLivePhotoView livePhotoBadgeImageWithOptions:PHLivePhotoBadgeOptionsOverContent]];
+		_livePhotoBadge = [NYTBadgeLive new];
+		//_livePhotoBadge = [[UIImageView alloc] initWithImage:[PHLivePhotoView livePhotoBadgeImageWithOptions:PHLivePhotoBadgeOptionsOverContent]];
 		[self setLivePhotoBadgeHidden:YES animated:NO];
 		
 		[self updateMediaTypeSpecificLayers:self.photo];
@@ -226,11 +263,11 @@ NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification = @"NYTPhot
 	}
 	if ([self isLivePhoto:photo])
 	{
-		[self setLivePhotoBadgeHidden:NO animated:YES];
+		[self setLivePhotoBadgeHidden:NO animated:NO];
 	}
 	else
 	{
-		[self setLivePhotoBadgeHidden:YES animated:YES];
+		[self setLivePhotoBadgeHidden:YES animated:NO];
 	}
 }
 
@@ -277,17 +314,18 @@ NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification = @"NYTPhot
 	if (animated) {
 		self.livePhotoBadge.hidden = NO;
 		
-		self.livePhotoBadge.alpha = hidden ? 1.0 : 0.0;
+		self.livePhotoBadge.alpha = hidden ? 0.5 : 0.0;
 		
 		[UIView animateWithDuration:0.2 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionAllowAnimatedContent | UIViewAnimationOptionAllowUserInteraction animations:^{
-			self.livePhotoBadge.alpha = hidden ? 0.0 : 1.0;
+			self.livePhotoBadge.alpha = hidden ? 0.0 : 0.5;
 		} completion:^(BOOL finished) {
-			self.livePhotoBadge.alpha = 1.0;
+			self.livePhotoBadge.alpha = 0.5;
 			self.livePhotoBadge.hidden = hidden;
 		}];
 	}
 	else {
 		self.livePhotoBadge.hidden = hidden;
+		if (!hidden) self.livePhotoBadge.alpha = 0.5;
 	}
 }
 

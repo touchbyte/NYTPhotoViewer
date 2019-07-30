@@ -52,7 +52,6 @@ extern NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification;
  */
 @property (nonatomic, readonly) UIButton *playButton;
 
-@property (nonatomic, readonly) UIImageView *livePhotoBadge;
 
 /**
  *  The designated initializer that takes the photo and activity view.
@@ -64,6 +63,7 @@ extern NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification;
  *  @return A fully initialized object.
  */
 - (instancetype)initWithPhoto:(nullable id <NYTPhoto>)photo loadingView:(nullable UIView *)loadingView notificationCenter:(nullable NSNotificationCenter *)notificationCenter NS_DESIGNATED_INITIALIZER;
+- (void)setOverlayViewsHidden:(BOOL)hidden animated:(BOOL)animated;
 
 @end
 
@@ -78,6 +78,7 @@ extern NSString * const NYTPhotoViewControllerPhotoImageUpdatedNotification;
  *  @param longPressGestureRecognizer The long press gesture recognizer that recognized the long press.
  */
 - (void)photoViewController:(NYTPhotoViewController *)photoViewController didLongPressWithGestureRecognizer:(UILongPressGestureRecognizer *)longPressGestureRecognizer;
+
 
 @end
 
