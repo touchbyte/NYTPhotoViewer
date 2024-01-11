@@ -16,6 +16,7 @@
 #import "NYTPhotosOverlayView.h"
 #import "NYTPhotoCaptionView.h"
 #import "NSBundle+NYTPhotoViewer.h"
+#import "NYTPhotoViewer/NYTMediaResource.h"
 
 #ifdef ANIMATED_GIF_SUPPORT
 #import <FLAnimatedImage/FLAnimatedImage.h>
@@ -291,7 +292,15 @@ static const UIEdgeInsets NYTPhotosViewControllerCloseButtonImageInsets = {3, 0,
     
     if (!clientDidHandle && (self.currentlyDisplayedPhoto.image || self.currentlyDisplayedPhoto.imageData)) {
         UIImage *image = self.currentlyDisplayedPhoto.image ? self.currentlyDisplayedPhoto.image : [UIImage imageWithData:self.currentlyDisplayedPhoto.imageData];
-        UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[image] applicationActivities:nil];
+        NSArray *activities = @[image];
+        if (self.currentlyDisplayedPhoto.resources.count>0) {
+            NSMutableArray *tempArray = [NSMutableArray new];
+            for (id<NYTMediaResource> resource in self.currentlyDisplayedPhoto.resources) {
+                [tempArray addObject:[resource url]];
+            }
+            if (tempArray.count>0) activities = tempArray;
+        }
+        UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:activities applicationActivities:nil];
         activityViewController.popoverPresentationController.barButtonItem = sender;
         activityViewController.completionWithItemsHandler = ^(NSString * __nullable activityType, BOOL completed, NSArray * __nullable returnedItems, NSError * __nullable activityError) {
             if (completed && [self.delegate respondsToSelector:@selector(photosViewController:actionCompletedWithActivityType:)]) {

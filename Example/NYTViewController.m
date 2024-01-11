@@ -156,22 +156,22 @@ typedef NS_ENUM(NSUInteger, NYTViewControllerPhotoIndex) {
 + (NYTPhotoViewerArrayDataSource *)touchbyteDataSource {
 	NSMutableArray *media = [NSMutableArray array];
 	
-	MediaObject *obj1 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0001.JPG"] andResourceType:RTPhoto];
+	MediaObject *obj1 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hendrikh/crypt/2024/01/11/DSC00003.JPG"] andResourceType:RTPhoto];
 	[media addObject:obj1];
 
-	MediaObject *obj2 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0002.HEIC"] andResourceType:RTPhoto];
+	MediaObject *obj2 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hendrikh/crypt/2024/01/11/DSC00002.JPG"] andResourceType:RTPhoto];
 	[media addObject:obj2];
 
-	MediaObject *obj3 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0003.DNG"] andResourceType:RTRaw];
+	MediaObject *obj3 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hendrikh/crypt/2024/01/11/DSC00001.ARW"] andResourceType:RTRaw];
 	[media addObject:obj3];
 
-	MediaObject *obj4 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0004.MOV"] andResourceType:RTVideo];
+    MediaObject *obj4 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hendrikh/crypt/2024/01/11/DSC00005.JPG"] andResourceType:RTPhoto];
 	[media addObject:obj4];
 	
-	MediaObject *obj5 = [[MediaObject alloc] initWithURLArray:[NSArray arrayWithObjects:[NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0005.HEIC"], [NSURL fileURLWithPath:@"/Users/hschottm/Source/git/NYTPhotoViewer/Example/Files/IMG_0005.MOV"], nil]];
+    MediaObject *obj5 = [[MediaObject alloc] initWithURL:[NSURL fileURLWithPath:@"/Users/hendrikh/crypt/2024/01/11/DSC00004.JPG"] andResourceType:RTPhoto];
 	[media addObject:obj5];
-	
-	return [NYTPhotoViewerArrayDataSource dataSourceWithPhotos:media];
+
+    return [NYTPhotoViewerArrayDataSource dataSourceWithPhotos:media];
 }
 
 + (NYTPhotoViewerArrayDataSource *)newTimesBuildingDataSource {
